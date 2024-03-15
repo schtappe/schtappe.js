@@ -15,7 +15,19 @@ result = Utils.empty(File)
 console.assert("size" in result)
 
 result = Utils.transformers.object.toFormData({ foo: "bar" })
-console.assert(result.get("foo") == "bar")
+console.assert(result.get("foo") == "bar", "plain object")
+result = Utils.transformers.object.toFormData({
+        foo: {
+                bar: "baz",
+                qux: "quux",
+                corge: {
+                        grault: "garply"
+                },
+        },
+})
+console.assert(result.get("foo[bar]") == "baz", "nested object")
+console.assert(result.get("foo[qux]") == "quux", "nested object")
+console.assert(result.get("foo[corge][grault]") == "garply", "nested object")
 
 console.assert(Utils.predicates.isObject("") == false, "string")
 console.assert(Utils.predicates.isObject(0) == false, "number")
