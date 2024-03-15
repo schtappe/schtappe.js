@@ -43,4 +43,10 @@ console.assert(Utils.predicates.isObject(new Map()) == true, "map")
 
 console.assert(Utils.tap((value) => value.toFixed(2))(21) == 21)
 
+console.assert(Utils.compose(
+        (z) => z.toString(),
+        (y) => y + 1,
+        (x) => x * 2
+)(42) == "85")
+
 console.log("done!")

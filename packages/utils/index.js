@@ -3,6 +3,14 @@ export const capitalize = (value) => {
         return value.charAt(0).toLocaleUpperCase() + value.slice(1)
 }
 
+// TODO(aes): assess performance impact
+export const compose = (...fns) => (...args) => {
+        return fns.reduceRight(
+                (result, fn) => [fn.apply(null, result)],
+                args
+        )[0]
+}
+
 const _empty = new Map([
         // primitives
         [ Array, [] ],
