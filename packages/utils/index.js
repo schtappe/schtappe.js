@@ -8,4 +8,11 @@ export const functionalize = (maybeFn) =>
                 ? maybeFn
                 : () => maybeFn
 
+export const pick = (props = []) => (object = {}) => {
+        return props.reduce((result, prop) => {
+                result[prop] = object[prop]
+                return result
+        }, {})
+}
+
 export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
