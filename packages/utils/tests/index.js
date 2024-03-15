@@ -65,4 +65,11 @@ console.assert(Utils.reverse(
         (a) => (b) => a - b,
 )(1)(2) == 1)
 
+console.assert(Utils.always(123)() == 123)
+
+const memoizedFn = Utils.once(() => Math.random())
+const memoizedResult = memoizedFn()
+console.assert(memoizedFn() == memoizedResult)
+console.assert(memoizedFn() == memoizedResult)
+
 console.log("done!")

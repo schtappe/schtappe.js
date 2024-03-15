@@ -1,3 +1,5 @@
+export const always = (value) => () => (value)
+
 export const capitalize = (value) => {
         value = String(value)
         return value.charAt(0).toLocaleUpperCase() + value.slice(1)
@@ -36,6 +38,11 @@ export const functionalize = (maybeFn) =>
                 : () => maybeFn
 
 export const identity = (v) => (v)
+
+export const once = (fn) => {
+        const result = fn()
+        return () => result
+}
 
 export const pick = (props = []) => (object = {}) => {
         return props.reduce((result, prop) => {
