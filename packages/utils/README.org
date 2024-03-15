@@ -1,0 +1,23 @@
+# -*- mode: org; -*-
+# vim: ft=org
+
+#+title: schtappe.js/utils
+
+* introduction
+this is an assorted collection of javascript utility functions
+
+* install
+#+begin_src shell
+  npm install @schtappe/utils
+#+end_src
+
+* usage
+#+begin_src js
+  import * as Utils from "@schtappe/utils"
+  Utils.empty(Object)
+#+end_src
+
+* test
+#+begin_src shell
+  npm test
+#+end_src

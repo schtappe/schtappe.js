@@ -1,0 +1,13 @@
+# -*- mode: org; -*-
+# vim: ft=org
+
+#+title: schtappe.js
+
+* introduction
+this is a collection of javascript libraries to make life easier
+
+* packages
+** @schtappe/utils
+#+begin_src shell
+  npm install @schtappe/utils
+#+end_src
