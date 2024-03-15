@@ -61,4 +61,8 @@ console.assert(Utils.compose(
         (x) => x * 2
 )(42) == "85")
 
+console.assert(Utils.reverse(
+        (a) => (b) => a - b,
+)(1)(2) == 1)
+
 console.log("done!")

@@ -44,6 +44,9 @@ export const pick = (props = []) => (object = {}) => {
         }, {})
 }
 
+// ((a) => (b) => c) => (b) => (a) => c
+export const reverse = (fn) => (a) => (b) => fn(b)(a)
+
 export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export const tap = (fn) => (value) => (fn(value), value)
