@@ -5,6 +5,16 @@ export const capitalize = (value) => {
         return value.charAt(0).toLocaleUpperCase() + value.slice(1)
 }
 
+export const curry = (fn) => {
+        const arity = fn.length
+        return function currier(...args) {
+                if (args.length < arity) {
+                        return currier.bind(null, ...args)
+                }
+                return fn.apply(null, args)
+        }
+}
+
 // TODO(aes): assess performance impact
 export const compose = (...fns) => (...args) => {
         return fns.reduceRight(
@@ -35,7 +45,7 @@ export const empty = (type) => {
 export const functionalize = (maybeFn) =>
         typeof maybeFn == "function"
                 ? maybeFn
-                : () => maybeFn
+                : always(maybeFn)
 
 export const identity = (v) => (v)
 
@@ -44,7 +54,7 @@ export const once = (fn) => {
         return () => result
 }
 
-export const pick = (props = []) => (object = {}) => {
+export const pick = (props = [], object = {}) => {
         return props.reduce((result, prop) => {
                 result[prop] = object[prop]
                 return result
@@ -52,11 +62,11 @@ export const pick = (props = []) => (object = {}) => {
 }
 
 // ((a) => (b) => c) => (b) => (a) => c
-export const reverse = (fn) => (a) => (b) => fn(b)(a)
+export const reverse = (fn) => (a, b) => fn(b)(a)
 
 export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-export const tap = (fn) => (value) => (fn(value), value)
+export const tap = (fn, value) => (fn(value), value)
 
 export * as transformers from "./transformers.js"
 

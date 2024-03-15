@@ -4,7 +4,7 @@ import * as Utils from "../index.js"
 
 let result
 
-result = Utils.pick(["foo"])({ foo: 1, bar: 2})
+result = Utils.pick(["foo"], { foo: 1, bar: 2})
 console.assert(result.foo == 1 && result.bar == undefined)
 
 result = Utils.empty(Boolean)
@@ -53,7 +53,7 @@ console.assert(Utils.predicates.isPlainObject(new Date()) == false, "date")
 console.assert(Utils.predicates.isPlainObject(new Map()) == false, "map")
 console.assert(Utils.predicates.isPlainObject({}) == true, "object")
 
-console.assert(Utils.tap((value) => value.toFixed(2))(21) == 21)
+console.assert(Utils.tap((value) => value.toFixed(2), 21) == 21)
 
 console.assert(Utils.compose(
         (z) => z.toString(),
@@ -63,7 +63,7 @@ console.assert(Utils.compose(
 
 console.assert(Utils.reverse(
         (a) => (b) => a - b,
-)(1)(2) == 1)
+)(1, 2) == 1)
 
 console.assert(Utils.always(123)() == 123)
 
@@ -71,5 +71,8 @@ const memoizedFn = Utils.once(() => Math.random())
 const memoizedResult = memoizedFn()
 console.assert(memoizedFn() == memoizedResult)
 console.assert(memoizedFn() == memoizedResult)
+
+console.assert(Utils.curry((a, b) => a + b)(1)(2) == 3)
+console.assert(Utils.curry((a, b) => a + b)(1, 2) == 3)
 
 console.log("done!")
