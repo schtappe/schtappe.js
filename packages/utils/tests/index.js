@@ -41,4 +41,6 @@ console.assert(Utils.predicates.isObject({}) == true, "object")
 console.assert(Utils.predicates.isObject(new Date()) == true, "date")
 console.assert(Utils.predicates.isObject(new Map()) == true, "map")
 
+console.assert(Utils.tap((value) => value.toFixed(2))(21) == 21)
+
 console.log("done!")
