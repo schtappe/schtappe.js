@@ -14,4 +14,7 @@ console.assert("getDate" in result)
 result = Utils.empty(File)
 console.assert("size" in result)
 
+result = Utils.transformers.object.toFormData({ foo: "bar" })
+console.assert(result.get("foo") == "bar")
+
 console.log("done!")
