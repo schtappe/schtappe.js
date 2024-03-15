@@ -14,6 +14,7 @@ const _empty = new Map([
         [ Symbol, Symbol() ],
 
         // non-primitives
+        [ Date, new Date(0) ],
         [ File, new File([""], "") ],
 ])
 export const empty = (type) => {

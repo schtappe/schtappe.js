@@ -9,6 +9,8 @@ console.assert(result.foo == 1 && result.bar == undefined)
 
 result = Utils.empty(Boolean)
 console.assert(result == false)
+result = Utils.empty(Date)
+console.assert("getDate" in result)
 result = Utils.empty(File)
 console.assert("size" in result)
 
