@@ -1,8 +1,8 @@
-import { isObject } from "./predicates.js"
+import { isPlainObject } from "./predicates.js"
 
 // (Object, String) => [ [String, Value], ... ]
 const getEntries = (root, baseKey) => {
-        if (!isObject(root)) return [[baseKey, root]]
+        if (!isPlainObject(root)) return [[baseKey, root]]
 
         const result = []
 
