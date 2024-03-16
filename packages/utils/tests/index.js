@@ -75,4 +75,40 @@ console.assert(memoizedFn() == memoizedResult)
 console.assert(Utils.curry((a, b) => a + b)(1)(2) == 3)
 console.assert(Utils.curry((a, b) => a + b)(1, 2) == 3)
 
+result = Utils.list.map((v) => v * 2, [1,2,3])
+console.assert(result.next().value == 2)
+console.assert(result.next().value == 4)
+console.assert(result.next().value == 6)
+console.assert(result.next().value == null)
+
+result = Utils.list.filter((v) => v % 2 == 0, [10,11,12,13,14,15])
+console.assert(result.next().value == 10)
+console.assert(result.next().value == 12)
+console.assert(result.next().value == 14)
+console.assert(result.next().value == null)
+
+let composed
+composed = Utils.compose(
+        Utils.curry(Utils.list.map)((v) => v / 2),
+        Utils.curry(Utils.list.map)((v) => v * 3 + 1 ),
+)
+result = composed([1,2,3])
+console.assert(result.next().value == 2)
+console.assert(result.next().value == 3.5)
+console.assert(result.next().value == 5)
+console.assert(result.next().value == null)
+
+composed = Utils.compose(
+        Utils.curry(Utils.list.map)((v) => `Hello ${v}`),
+        Utils.curry(Utils.list.filter)((s) => s.startsWith("A"))
+)
+result = composed(["John", "Albert", "Doe", "Adolphine"])
+console.assert(result.next().value == "Hello Albert")
+console.assert(result.next().value == "Hello Adolphine")
+console.assert(result.next().value == null)
+
+result = Utils.list.reduce((total, item) => total + item, 0, [1,2,3])
+console.assert(result.next().value == 6)
+console.assert(result.next().value == null)
+
 console.log("done!")

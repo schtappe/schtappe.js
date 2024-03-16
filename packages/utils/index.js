@@ -71,3 +71,5 @@ export const tap = (fn, value) => (fn(value), value)
 export * as transformers from "./transformers.js"
 
 export * as predicates from "./predicates.js"
+
+export * as list from "./list.js"
