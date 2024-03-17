@@ -5,6 +5,8 @@ export const capitalize = (value) => {
         return value.charAt(0).toLocaleUpperCase() + value.slice(1)
 }
 
+export const concat = (x, xs) => xs.concat(x)
+
 export const curry = (fn) => {
         const arity = fn.length
         return function currier(...args) {
@@ -42,6 +44,8 @@ export const empty = (type) => {
         return _empty.get(type)
 }
 
+export const flip = (fn) => (a, b, ...args) => fn(b, a, ...args)
+
 export const functionalize = (maybeFn) =>
         typeof maybeFn == "function"
                 ? maybeFn
@@ -73,3 +77,5 @@ export * as transformers from "./transformers.js"
 export * as predicates from "./predicates.js"
 
 export * as list from "./list.js"
+
+export * as generator from "./generator.js"
