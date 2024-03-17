@@ -13,7 +13,6 @@ export const reduce = (fn, init, xs) => xs.reduce(fn, init)
  * transduce evaluates from left to right, as it builds up the transducer function
  * i.e., as the stack of input is popped off, there is another stack of transducer being pushed in
  * this MIGHT become apparent if map/filter is implemented via reduce
- * as a hacky-workaround, reduceRight is used here instead
  *
  * https://www.youtube.com/watch?v=6mTbuzafcII
  *
@@ -21,13 +20,13 @@ export const reduce = (fn, init, xs) => xs.reduce(fn, init)
  * transformer -> reducer       -> seed -> xs  -> a
  */
 export const transduce = (transformer, reducer, seed, xs) => xs
-        ? xs.reduceRight(
+        ? xs.reduce(
                 (acc, x) => reducer(acc, transformer(x)),
                 seed
         )
         // NOTE(aes): this function is called a "transducer"
         // since it "transforms" and subsequently "reduces"
-        : (xs) => xs.reduceRight(
+        : (xs) => xs.reduce(
                 (acc, x) => reducer(acc, transformer(x)),
                 seed
         )
