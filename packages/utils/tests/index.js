@@ -87,22 +87,22 @@ console.assert(result.next().value == 12)
 console.assert(result.next().value == 14)
 console.assert(result.next().value == null)
 
-let composed
-composed = Utils.compose(
+let generator
+generator = Utils.compose(
         Utils.curry(Utils.generator.map)((v) => v / 2),
         Utils.curry(Utils.generator.map)((v) => v * 3 + 1 ),
 )
-result = composed([1,2,3])
+result = generator([1,2,3])
 console.assert(result.next().value == 2)
 console.assert(result.next().value == 3.5)
 console.assert(result.next().value == 5)
 console.assert(result.next().value == null)
 
-composed = Utils.compose(
+generator = Utils.compose(
         Utils.curry(Utils.generator.map)((v) => `Hello ${v}`),
         Utils.curry(Utils.generator.filter)((s) => s.startsWith("A"))
 )
-result = composed(["John", "Albert", "Doe", "Adolphine"])
+result = generator(["John", "Albert", "Doe", "Adolphine"])
 console.assert(result.next().value == "Hello Albert")
 console.assert(result.next().value == "Hello Adolphine")
 console.assert(result.next().value == null)
@@ -111,23 +111,34 @@ result = Utils.generator.reduce((total, item) => total + item, 0, [1,2,3])
 console.assert(result.next().value == 6)
 console.assert(result.next().value == null)
 
-const addOne = (x) => x + 1
-const multiplyTwo = (x) => x * 2
-const subtractThree = (x) => x - 3
-const transformer = Utils.compose(subtractThree, multiplyTwo, addOne)
-const reducer = Utils.flip(Utils.concat)
-const seed = []
-const xs = [1, 4, 3]
 console.assert(
-        Utils.list.transduce(
-                transformer, // (b -> c)      transformer
-                reducer,     // (a -> c -> a) reducer
-                seed,        // a             seed
-                xs           // [b]           xs
-        ).reduce((total, item) => total + item)
-                == (((1 + 1) * 2) - 3)
-                 + (((4 + 1) * 2) - 3)
-                 + (((3 + 1) * 2) - 3)
+        Utils.list.map((x) => x + 1, [1,2,3]).reduce((r, x) => r + x, 0)
+                == (2 + 3 + 4)
+)
+
+console.assert(
+        Utils.list.filter((x) => (x % 2) === 0, [1,2,3]).reduce((r, x) => r + x, 0)
+                == (2)
+)
+
+console.assert(Utils.list.reduce((r, x) => r + x, 0, [1,2,3]) == (6))
+
+console.assert(
+        Utils.list.reduce(
+                Utils.reducers.map((x) => x + 1)(Utils.flip(Utils.concat)),
+                [],
+                [8,7,6]
+        ).reduce((r, x) => r + x)
+                == (9 + 8 + 7)
+)
+
+console.assert(
+        Utils.list.reduce(
+                Utils.reducers.filter((x) => x % 2 === 0)(Utils.flip(Utils.concat)),
+                [],
+                [8,7,6]
+        ).reduce((r, x) => r + x)
+                == (8 + 6)
 )
 
 console.log("done!")
