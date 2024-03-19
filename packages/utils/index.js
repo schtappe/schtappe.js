@@ -51,6 +51,8 @@ export const functionalize = (maybeFn) =>
 
 export const identity = (v) => (v)
 
+export const noop = ()=>{}
+
 export const once = (fn) => {
         const result = fn()
         return () => result

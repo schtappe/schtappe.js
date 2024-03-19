@@ -56,3 +56,8 @@ test("curry", (t) => {
         assert.equal(Utils.curry((a, b) => a + b)(1)(2), 3)
         assert.equal(Utils.curry((a, b) => a + b)(1, 2), 3)
 })
+
+test("noop", (t) => {
+        assert.equal(Utils.noop.toString(), "()=>{}")
+        assert.equal(Utils.noop(), void 0)
+})
