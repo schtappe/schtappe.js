@@ -10,7 +10,7 @@ export const downloadBlob = (blob, filename) => {
         const clickHandler = () => {
                 setTimeout(() => {
                         URL.revokeObjectURL(url)
-                        this.removeEventListener("click", clickHandler)
+                        a.removeEventListener("click", clickHandler)
                 }, 150)
         }
         a.addEventListener("click", clickHandler, false)
