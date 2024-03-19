@@ -20,4 +20,6 @@ this is an assorted collection of javascript utility functions
 * test
 #+begin_src shell
   npm test
+  # or
+  npm run watch
 #+end_src

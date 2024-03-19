@@ -11,3 +11,10 @@ this is a collection of javascript libraries to make life easier
 #+begin_src shell
   npm install @schtappe/utils
 #+end_src
+
+* test
+#+begin_src shell
+  npm test
+  # or
+  npm run watch
+#+end_src

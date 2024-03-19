@@ -7,8 +7,12 @@
         "exports": {
                 "import": "./index.js"
         },
+        "imports": {
+                "#app/*": "./*"
+        },
         "scripts": {
-                "test": "node ./tests/index.js"
+                "test": "node --test ./tests/",
+                "watch": "node --test --watch ./tests/"
         },
         "repository": {
                 "type": "git",

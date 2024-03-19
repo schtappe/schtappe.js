@@ -5,8 +5,6 @@ export const capitalize = (value) => {
         return value.charAt(0).toLocaleUpperCase() + value.slice(1)
 }
 
-export { concat } from "./concat.js"
-
 export const curry = (fn) => {
         const arity = fn.length
         return function currier(...args) {
@@ -27,17 +25,17 @@ export const compose = (...fns) => (...args) => {
 
 const _empty = new Map([
         // primitives
-        [ Array, [] ],
-        [ Boolean, false ],
-        [ Function, () => {} ],
-        [ Number, 0 ],
-        [ Object, {} ],
-        [ String, "" ],
-        [ Symbol, Symbol() ],
+        [Array, []],
+        [Boolean, false],
+        [Function, () => { }],
+        [Number, 0],
+        [Object, {}],
+        [String, ""],
+        [Symbol, Symbol()],
 
         // non-primitives
-        [ Date, new Date(0) ],
-        [ File, new File([""], "") ],
+        [Date, new Date(0)],
+        [File, new File([""], "")],
 ])
 export const empty = (type) => {
         if (!_empty.has(type)) throw new Error("Unknown empty type")
@@ -66,14 +64,15 @@ export const pick = (props = [], object = {}) => {
 }
 
 // ((a) => (b) => c) => (b) => (a) => c
-export const reverse = (fn) => (a, b) => fn(b)(a)
+export const reverse = flip
 
 export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export const tap = (fn, value) => (fn(value), value)
 
-export * as generator from "./generator.js"
-export * as list from "./list.js"
-export * as predicates from "./predicates.js"
-export * as reducers from "./reducers.js"
-export * as transformers from "./transformers.js"
+export { concat } from "./src/concat.js"
+export * as generator from "./src/generator.js"
+export * as list from "./src/list.js"
+export * as predicates from "./src/predicates.js"
+export * as reducers from "./src/reducers.js"
+export * as transformers from "./src/transformers.js"
