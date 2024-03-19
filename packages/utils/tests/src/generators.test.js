@@ -48,3 +48,23 @@ test("compose", (t) => {
         assert.equal(result.next().value, "Hello Adolphine")
         assert.equal(result.next().value, null)
 })
+
+test("persist", (t) => {
+        function* foo() {
+                let i = 0
+                for (;;) {
+                        for (;;) {
+                                if (i == 2)
+                                        break
+                                yield i
+                                ++i
+                        }
+                        ++i
+                }
+        }
+        const baz = Utils.generator.persist(foo())
+        assert.deepEqual(baz.next(), { value: 0, done: false })
+        assert.deepEqual(baz.next(), { value: 1, done: false })
+        assert.deepEqual(baz.next(), { value: 3, done: false })
+        assert.deepEqual(baz.next(), { value: 4, done: false })
+})
