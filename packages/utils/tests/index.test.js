@@ -79,3 +79,22 @@ test("dig", (t) => {
                 undefined
         )
 })
+
+test("pluralize", (t) => {
+        assert.strictEqual(
+                Utils.pluralize(-1, "foo", "foos"),
+                "foos"
+        )
+        assert.strictEqual(
+                Utils.pluralize(0, "foo", "foos"),
+                "foos"
+        )
+        assert.strictEqual(
+                Utils.pluralize(1, "foo", "foos"),
+                "foo"
+        )
+        assert.strictEqual(
+                Utils.pluralize(2, "foo", "foos"),
+                "foos"
+        )
+})

@@ -81,6 +81,9 @@ export const pick = (props = [], object = {}) => {
         }, {})
 }
 
+export const pluralize = (number = 0, singular = "", plural = "") =>
+        number === 1 ? singular : plural
+
 // ((a) => (b) => c) => (b) => (a) => c
 export const reverse = flip
 
