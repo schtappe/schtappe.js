@@ -68,3 +68,14 @@ test("omit", (t) => {
                 { bar: 2 }
         )
 })
+
+test("dig", (t) => {
+        assert.strictEqual(
+                Utils.dig("foo.bar.baz", { foo: { bar: { baz: "qux" } } }),
+                "qux"
+        )
+        assert.strictEqual(
+                Utils.dig("foo.bar.baz.qux", {}),
+                undefined
+        )
+})
