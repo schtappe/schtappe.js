@@ -31,6 +31,14 @@ test("compose", (t) => {
         )(42),
                 "85"
         )
+        assert.deepEqual(
+                Utils.compose(
+                        (xs) => xs.map((x) => x.toString()),
+                        (xs) => xs.filter((x) => x % 2 === 0),
+                        (xs) => xs.map((x) => x + 1)
+                )([1, 2, 3]),
+                ["2", "4"]
+        )
 })
 
 test("reverse", (t) => {
@@ -58,7 +66,7 @@ test("curry", (t) => {
 })
 
 test("noop", (t) => {
-        assert.equal(Utils.noop.toString(), "()=>{}")
+        assert.equal(Utils.noop.toString().replaceAll(" ", ""), "()=>{}")
         assert.equal(Utils.noop(), void 0)
 })
 
@@ -96,5 +104,24 @@ test("pluralize", (t) => {
         assert.strictEqual(
                 Utils.pluralize(2, "foo", "foos"),
                 "foos"
+        )
+})
+
+test("pipe", (t) => {
+        assert.equal(
+                Utils.pipe(
+                        (x) => x + 1,
+                        (x) => x * 2,
+                        (x) => x.toString()
+                )(3),
+                "8"
+        )
+        assert.deepEqual(
+                Utils.pipe(
+                        (xs) => xs.map((x) => x + 1),
+                        (xs) => xs.filter((x) => x % 2 === 0),
+                        (xs) => xs.map((x) => x.toString())
+                )([1, 2, 3]),
+                ["2", "4"]
         )
 })

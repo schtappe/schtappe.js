@@ -5,6 +5,7 @@ export const capitalize = (value) => {
         return value.charAt(0).toLocaleUpperCase() + value.slice(1)
 }
 
+// TODO(aes): assess performance impact
 export const curry = (fn) => {
         const arity = fn.length
         return function currier(...args) {
@@ -15,7 +16,6 @@ export const curry = (fn) => {
         }
 }
 
-// TODO(aes): assess performance impact
 export const compose = (...fns) => (...args) => {
         return fns.reduceRight(
                 (result, fn) => [fn.apply(null, result)],
@@ -59,7 +59,7 @@ export const functionalize = (maybeFn) =>
 
 export const identity = (v) => (v)
 
-export const noop = ()=>{}
+export const noop = () => { }
 
 export const omit = (props = [], object = {}) => {
         return Object.keys(object).reduce((result, key) => {
@@ -81,6 +81,13 @@ export const pick = (props = [], object = {}) => {
         }, {})
 }
 
+export const pipe = (...fns) => (...args) => {
+        return fns.reduce(
+                (result, fn) => [fn.apply(null, result)],
+                args
+        )[0]
+}
+
 export const pluralize = (number = 0, singular = "", plural = "") =>
         number === 1 ? singular : plural
 
@@ -92,9 +99,10 @@ export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 export const tap = (fn, value) => (fn(value), value)
 
 export { concat } from "./src/concat.js"
+
+export * as dom from "./src/dom.js"
 export * as generator from "./src/generator.js"
 export * as list from "./src/list.js"
 export * as predicates from "./src/predicates.js"
 export * as reducers from "./src/reducers.js"
 export * as transformers from "./src/transformers.js"
-export * as dom from "./src/dom.js"
