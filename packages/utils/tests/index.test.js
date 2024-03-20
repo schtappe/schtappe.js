@@ -61,3 +61,10 @@ test("noop", (t) => {
         assert.equal(Utils.noop.toString(), "()=>{}")
         assert.equal(Utils.noop(), void 0)
 })
+
+test("omit", (t) => {
+        assert.deepEqual(
+                Utils.omit(["foo"], { foo: 1, bar: 2 }),
+                { bar: 2 }
+        )
+})
