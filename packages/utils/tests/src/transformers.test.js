@@ -21,6 +21,11 @@ test("toFormData", (t) => {
                         corge: {
                                 grault: "garply"
                         },
+                        alpha: [
+                                { beta: "gamma" },
+                                { delta: "epsilon" },
+                                { zeta: { eta: "theta", iota: [{ kappa: "lambda" }] } }
+                        ],
                 },
         })
         assert.deepEqual(
@@ -29,6 +34,10 @@ test("toFormData", (t) => {
                         ["foo[bar]", "baz"],
                         ["foo[qux]", "quux"],
                         ["foo[corge][grault]", "garply"],
+                        ["foo[alpha][0][beta]", "gamma"],
+                        ["foo[alpha][1][delta]", "epsilon"],
+                        ["foo[alpha][2][zeta][eta]", "theta"],
+                        ["foo[alpha][2][zeta][iota][0][kappa]", "lambda"],
                 ],
         )
 })
