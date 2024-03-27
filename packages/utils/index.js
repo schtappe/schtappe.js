@@ -5,6 +5,8 @@ export const capitalize = (value) => {
         return value.charAt(0).toLocaleUpperCase() + value.slice(1)
 }
 
+export const clamp = (l, h, x) => Math.max(l, Math.min(h, x))
+
 // TODO(aes): assess performance impact
 export const curry = (fn) => {
         const arity = fn.length
@@ -76,7 +78,8 @@ export const once = (fn) => {
 
 export const pick = (props = [], object = {}) => {
         return props.reduce((result, prop) => {
-                result[prop] = object[prop]
+                if (object.hasOwnProperty(prop))
+                        result[prop] = object[prop]
                 return result
         }, {})
 }

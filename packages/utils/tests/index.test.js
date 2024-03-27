@@ -8,6 +8,10 @@ test("pick", (t) => {
                 Utils.pick(["foo"], { foo: 1, bar: 2 }),
                 { foo: 1 }
         )
+        assert.deepEqual(
+                Utils.pick(["foo"], { bar: 2 }),
+                {}
+        )
 })
 
 test("empty", (t) => {
@@ -123,5 +127,20 @@ test("pipe", (t) => {
                         (xs) => xs.map((x) => x.toString())
                 )([1, 2, 3]),
                 ["2", "4"]
+        )
+})
+
+test("clamp", (t) => {
+        assert.deepEqual(
+                Utils.clamp(20, 100, 10),
+                20
+        )
+        assert.deepEqual(
+                Utils.clamp(20, 100, 50),
+                50
+        )
+        assert.deepEqual(
+                Utils.clamp(20, 100, 130),
+                100
         )
 })
