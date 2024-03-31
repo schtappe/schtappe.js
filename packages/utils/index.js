@@ -1,107 +1,22 @@
-export const always = (value) => () => (value)
-
-export const capitalize = (value) => {
-        value = String(value)
-        return value.charAt(0).toLocaleUpperCase() + value.slice(1)
-}
-
-export const clamp = (l, h, x) => Math.max(l, Math.min(h, x))
-
-// TODO(aes): assess performance impact
-export const curry = (fn) => {
-        const arity = fn.length
-        return function currier(...args) {
-                if (args.length < arity) {
-                        return currier.bind(null, ...args)
-                }
-                return fn.apply(null, args)
-        }
-}
-
-export const compose = (...fns) => (...args) => {
-        return fns.reduceRight(
-                (result, fn) => [fn.apply(null, result)],
-                args
-        )[0]
-}
-
-export const dig = (dot = "", object = {}) => {
-        return dot.split(".").reduce((result, key) => {
-                if (result == null) return result
-                result = result[key]
-                return result
-        }, object)
-}
-
-const _empty = new Map([
-        // primitives
-        [Array, []],
-        [Boolean, false],
-        [Function, () => { }],
-        [Number, 0],
-        [Object, {}],
-        [String, ""],
-        [Symbol, Symbol()],
-
-        // non-primitives
-        [Date, new Date(0)],
-        [File, new File([""], "")],
-])
-export const empty = (type) => {
-        if (!_empty.has(type)) throw new Error("Unknown empty type")
-        return _empty.get(type)
-}
-
-export const flip = (fn) => (a, b, ...args) => fn(b, a, ...args)
-
-export const functionalize = (maybeFn) =>
-        typeof maybeFn == "function"
-                ? maybeFn
-                : always(maybeFn)
-
-export const identity = (v) => (v)
-
-export const noop = () => { }
-
-export const omit = (props = [], object = {}) => {
-        return Object.keys(object).reduce((result, key) => {
-                if (!props.includes(key))
-                        result[key] = object[key]
-                return result
-        }, {})
-}
-
-export const once = (fn) => {
-        const result = fn()
-        return () => result
-}
-
-export const pick = (props = [], object = {}) => {
-        return props.reduce((result, prop) => {
-                if (object.hasOwnProperty(prop))
-                        result[prop] = object[prop]
-                return result
-        }, {})
-}
-
-export const pipe = (...fns) => (...args) => {
-        return fns.reduce(
-                (result, fn) => [fn.apply(null, result)],
-                args
-        )[0]
-}
-
-export const pluralize = (number = 0, singular = "", plural = "") =>
-        number === 1 ? singular : plural
-
-// ((a) => (b) => c) => (b) => (a) => c
-export const reverse = flip
-
-export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-
-export const tap = (fn, value) => (fn(value), value)
-
+export { always } from "./src/always.js"
+export { capitalize } from "./src/capitalize.js"
+export { clamp } from "./src/clamp.js"
 export { concat } from "./src/concat.js"
+export { curry } from "./src/curry.js"
+export { compose } from "./src/compose.js"
+export { dig } from "./src/dig.js"
+export { empty } from "./src/empty.js"
+export { flip, reverse } from "./src/flip.js"
+export { functionalize } from "./src/functionalize.js"
+export { identity } from "./src/identity.js"
+export { noop, unit } from "./src/noop.js"
+export { omit } from "./src/omit.js"
+export { once } from "./src/once.js"
+export { pick } from "./src/pick.js"
+export { pipe } from "./src/pipe.js"
+export { pluralize } from "./src/pluralize.js"
+export { sleep } from "./src/sleep.js"
+export { tap } from "./src/tap.js"
 
 export * as dom from "./src/dom.js"
 export * as generator from "./src/generator.js"

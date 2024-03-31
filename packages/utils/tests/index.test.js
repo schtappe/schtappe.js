@@ -1,3 +1,7 @@
+/**
+ * https://nodejs.org/api/assert.html
+ */
+
 import { test } from "node:test"
 import assert from "node:assert"
 
@@ -18,6 +22,9 @@ test("empty", (t) => {
         assert.ok(!Utils.empty(Boolean))
         assert.deepEqual(Utils.empty(Date), new Date(0))
         assert.deepEqual(Utils.empty(File), new File([""], "")) // TODO(aes): doesn't fail if content is changed
+
+        const foo = class { }
+        assert.equal(Utils.empty(foo), undefined)
 })
 
 test("tap", (t) => {
@@ -45,7 +52,13 @@ test("compose", (t) => {
         )
 })
 
-test("reverse", (t) => {
+test("flip/reverse", (t) => {
+        assert.equal(Utils.flip(
+                (a, b) => a - b,
+        )(3, 5),
+                2,
+        )
+
         assert.equal(Utils.reverse(
                 (a, b) => a - b,
         )(3, 5),
@@ -69,9 +82,10 @@ test("curry", (t) => {
         assert.equal(Utils.curry((a, b) => a + b)(1, 2), 3)
 })
 
-test("noop", (t) => {
+test("noop/unit", (t) => {
         assert.equal(Utils.noop.toString().replaceAll(" ", ""), "()=>{}")
         assert.equal(Utils.noop(), void 0)
+        assert.equal(Utils.unit(), undefined)
 })
 
 test("omit", (t) => {
@@ -143,4 +157,26 @@ test("clamp", (t) => {
                 Utils.clamp(20, 100, 130),
                 100
         )
+})
+
+test("functionalize", (t) => {
+        assert.equal(
+                Utils.functionalize("foo")(),
+                "foo"
+        )
+        assert.equal(
+                Utils.functionalize(() => "bar")(),
+                "bar"
+        )
+})
+
+test("identity", (t) => {
+        assert.equal(
+                Utils.identity("foo"),
+                "foo"
+        )
+})
+
+test("sleep", (t) => {
+        assert.doesNotReject(Utils.sleep(1))
 })
