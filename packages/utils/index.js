@@ -1,4 +1,5 @@
 export { always } from "./src/always.js"
+export { assign } from "./src/assign.js"
 export { capitalize } from "./src/capitalize.js"
 export { clamp } from "./src/clamp.js"
 export { concat } from "./src/concat.js"

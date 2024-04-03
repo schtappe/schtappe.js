@@ -180,3 +180,10 @@ test("identity", (t) => {
 test("sleep", (t) => {
         assert.doesNotReject(Utils.sleep(1))
 })
+
+test("assign", (t) => {
+        assert.deepEqual(
+                Utils.assign({ a: 1 }, { b: 2 }),
+                { a: 1, b: 2 }
+        )
+})
