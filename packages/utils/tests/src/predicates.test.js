@@ -31,3 +31,17 @@ test("isPlainObject", (t) => {
         assert.ok(Utils.predicates.isPlainObject({}))
 })
 
+test.only("isString", (t) => {
+        assert.ok(Utils.predicates.isString(""))
+        assert.ok(Utils.predicates.isString("foo"))
+        assert.ok(Utils.predicates.isString(String("foo")))
+        assert.ok(Utils.predicates.isString(String(123)))
+        assert.ok(!Utils.predicates.isString(false))
+        assert.ok(!Utils.predicates.isString(456))
+        assert.ok(!Utils.predicates.isString(null))
+        assert.ok(!Utils.predicates.isString(undefined))
+        assert.ok(!Utils.predicates.isString(["foo"]))
+        assert.ok(!Utils.predicates.isString({ foo: "bar" }))
+        assert.ok(!Utils.predicates.isString(new String("foo")))
+        assert.ok(!Utils.predicates.isString(new String(123)))
+})
