@@ -12,6 +12,7 @@ this is an assorted collection of javascript utility functions
 #+end_src
 
 * usage
+[[file:tests/index.test.js][see the ./tests/* folder for more examples]]
 #+begin_src js
   import * as Utils from "@schtappe/utils"
   Utils.empty(Object)

@@ -2,7 +2,7 @@
  * https://nodejs.org/api/assert.html
  */
 
-import { test } from "node:test"
+import { test, mock } from "node:test"
 import assert from "node:assert"
 
 import * as Utils from "../index.js"
@@ -186,4 +186,22 @@ test("assign", (t) => {
                 Utils.assign({ a: 1 }, { b: 2 }),
                 { a: 1, b: 2 }
         )
+})
+
+test("debounce", (t) => {
+        const fn = mock.fn()
+        mock.timers.enable({ apis: ["setTimeout"] });
+        const foo = Utils.debounce(9999, fn)
+
+        foo()
+        assert.equal(fn.mock.callCount(), 0)
+        mock.timers.tick(9999)
+        assert.equal(fn.mock.callCount(), 1)
+        foo()
+        mock.timers.tick(5000)
+        foo()
+        mock.timers.tick(9999)
+        assert.equal(fn.mock.callCount(), 2)
+
+        mock.reset()
 })

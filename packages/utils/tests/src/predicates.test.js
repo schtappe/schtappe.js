@@ -31,7 +31,7 @@ test("isPlainObject", (t) => {
         assert.ok(Utils.predicates.isPlainObject({}))
 })
 
-test.only("isString", (t) => {
+test("isString", (t) => {
         assert.ok(Utils.predicates.isString(""))
         assert.ok(Utils.predicates.isString("foo"))
         assert.ok(Utils.predicates.isString(String("foo")))
