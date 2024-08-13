@@ -11,48 +11,39 @@ map.set("key", "value")
 const set = new Set()
 set.add("entry1")
 const values = [
-        ["foo", "bar", "baz"],
-        42n,
-        true,
-        formData,
-        () => { console.log("foo") },
-        map,
-        null,
-        69,
-        { foo: "bar" },
-        set,
-        "foobar",
-        Symbol("foo"),
-        undefined,
+        [TYPE.ARRAY, ["foo", "bar", "baz"]],
+        [TYPE.BIGINT, 42n],
+        [TYPE.BOOLEAN, true],
+        [TYPE.FORMDATA, formData],
+        [TYPE.FUNCTION, () => { console.log("foo") }],
+        [TYPE.MAP, map],
+        [TYPE.NULL, null],
+        [TYPE.NUMBER, 69],
+        [TYPE.OBJECT, { foo: "bar" }],
+        [TYPE.SET, set],
+        [TYPE.STRING, "foobar"],
+        [TYPE.SYMBOL, Symbol("foo")],
+        [TYPE.UNDEFINED, undefined],
 ]
 
-test("toRaw", (t) => {
-        for (const value of values) {
-                const thing = Utils.value.create(value)
-                const result = thing.toRaw()
-                assert.deepEqual(result, value)
-        }
-})
-
-test("toOriginal", (t) => {
-        for (const value of values) {
-                const thing = Utils.value.create(value)
-                const result = thing.toOriginal()
-                assert.deepEqual(result, { success: true, value })
-        }
-})
-
 test("toArray", (t) => {
-        for (const value of values) {
-                const thing = Utils.value.create(value)
-                const result = thing.toArray()
-                switch (thing.type) {
+        for (const [type, value] of values) {
+                const result = Utils.value.toArray(value)
+                switch (type) {
                         case TYPE.ARRAY: {
                                 assert.deepEqual(result, { success: true, value })
                                 break
                         }
+                        case TYPE.FORMDATA: {
+                                assert.deepEqual(result, { success: true, value: [["input", "value"]] })
+                                break
+                        }
                         case TYPE.MAP: {
                                 assert.deepEqual(result, { success: true, value: [["key", "value"]] })
+                                break
+                        }
+                        case TYPE.NULL: {
+                                assert.ok(!result.success)
                                 break
                         }
                         case TYPE.OBJECT: {
@@ -63,8 +54,8 @@ test("toArray", (t) => {
                                 assert.deepEqual(result, { success: true, value: ["entry1"] })
                                 break
                         }
-                        case TYPE.FORMDATA: {
-                                assert.deepEqual(result, { success: true, value: [["input", "value"]] })
+                        case TYPE.UNDEFINED: {
+                                assert.ok(!result.success)
                                 break
                         }
                         default:
@@ -74,10 +65,9 @@ test("toArray", (t) => {
 })
 
 test("toBigint", (t) => {
-        for (const value of values) {
-                const thing = Utils.value.create(value)
-                const result = thing.toBigint()
-                switch (thing.type) {
+        for (const [type, value] of values) {
+                const result = Utils.value.toBigint(value)
+                switch (type) {
                         case TYPE.BIGINT: {
                                 assert.deepEqual(result, { success: true, value })
                                 break
@@ -90,17 +80,23 @@ test("toBigint", (t) => {
                                 assert.deepEqual(result, { success: true, value: 69 })
                                 break
                         }
-                        default:
+                        case TYPE.STRING: {
                                 assert.ok(!result.success)
+                                break
+                        }
+                        default:
+                                assert.ok(!result.success, type.name)
                 }
         }
+
+        let result = Utils.value.toBigint("69420")
+        assert.deepEqual(result, { success: true, value: 69420n })
 })
 
 test("toBoolean", (t) => {
-        for (const value of values) {
-                const thing = Utils.value.create(value)
-                const result = thing.toBoolean()
-                switch (thing.type) {
+        for (const [type, value] of values) {
+                const result = Utils.value.toBoolean(value)
+                switch (type) {
                         case TYPE.NULL:
                         case TYPE.UNDEFINED: {
                                 assert.deepEqual(result, { success: true, value: false })
@@ -113,10 +109,9 @@ test("toBoolean", (t) => {
 })
 
 test("toFormdata", (t) => {
-        for (const value of values) {
-                const thing = Utils.value.create(value)
-                const result = thing.toFormdata()
-                switch (thing.type) {
+        for (const [type, value] of values) {
+                const result = Utils.value.toFormdata(value)
+                switch (type) {
                         case TYPE.ARRAY: {
                                 assert.ok(result.success)
                                 assert.deepEqual(Array.from(result.value), [["0", "foo"], ["1", "bar"], ["2", "baz"]])
@@ -143,7 +138,7 @@ test("toFormdata", (t) => {
                 }
         }
 
-        const thing = Utils.value.create({
+        const result = Utils.value.toFormdata({
                 foo: {
                         bar: "baz",
                         qux: "quux",
@@ -157,7 +152,6 @@ test("toFormdata", (t) => {
                         ],
                 },
         })
-        const result = thing.toFormdata()
         assert.ok(result.success)
         assert.deepEqual(
                 [...result.value.entries()],
@@ -174,10 +168,9 @@ test("toFormdata", (t) => {
 })
 
 test("toFunction", (t) => {
-        for (const value of values) {
-                const thing = Utils.value.create(value)
-                const result = thing.toFunction()
-                switch (thing.type) {
+        for (const [type, value] of values) {
+                const result = Utils.value.toFunction(value)
+                switch (type) {
                         case TYPE.FUNCTION: {
                                 assert.deepEqual(result, { success: true, value })
                                 break
@@ -191,10 +184,9 @@ test("toFunction", (t) => {
 })
 
 test("toMap", (t) => {
-        for (const value of values) {
-                const thing = Utils.value.create(value)
-                const result = thing.toMap()
-                switch (thing.type) {
+        for (const [type, value] of values) {
+                const result = Utils.value.toMap(value)
+                switch (type) {
                         case TYPE.ARRAY: {
                                 assert.ok(result.success)
                                 assert.deepEqual(Array.from(result.value), [[0, "foo"], [1, "bar"], [2, "baz"]])
@@ -228,18 +220,16 @@ test("toMap", (t) => {
 })
 
 test("toNull", (t) => {
-        for (const value of values) {
-                const thing = Utils.value.create(value)
-                const result = thing.toNull()
+        for (const [type, value] of values) {
+                const result = Utils.value.toNull(value)
                 assert.deepEqual(result, { success: true, value: null })
         }
 })
 
 test("toNumber", (t) => {
-        for (const value of values) {
-                const thing = Utils.value.create(value)
-                const result = thing.toNumber()
-                switch (thing.type) {
+        for (const [type, value] of values) {
+                const result = Utils.value.toNumber(value)
+                switch (type) {
                         case TYPE.BIGINT: {
                                 assert.deepEqual(result, { success: true, value: BigInt(value) })
                                 break
@@ -253,17 +243,19 @@ test("toNumber", (t) => {
                                 break
                         }
                         default:
-                                assert.ok(!result.success)
+                                assert.ok(!result.success, value)
                                 break
                 }
         }
+
+        let result = Utils.value.toNumber("42069")
+        assert.deepEqual(result, { success: true, value: 42069 })
 })
 
 test("toObject", (t) => {
-        for (const value of values) {
-                const thing = Utils.value.create(value)
-                const result = thing.toObject()
-                switch (thing.type) {
+        for (const [type, value] of values) {
+                const result = Utils.value.toObject(value)
+                switch (type) {
                         case TYPE.ARRAY: {
                                 assert.deepEqual(result, { success: true, value: { 0: "foo", 1: "bar", 2: "baz" } })
                                 break
@@ -292,10 +284,9 @@ test("toObject", (t) => {
 })
 
 test("toSet", (t) => {
-        for (const value of values) {
-                const thing = Utils.value.create(value)
-                const result = thing.toSet()
-                switch (thing.type) {
+        for (const [type, value] of values) {
+                const result = Utils.value.toSet(value)
+                switch (type) {
                         case TYPE.ARRAY: {
                                 assert.ok(result.success)
                                 assert.deepEqual(Array.from(result.value), ["foo", "bar", "baz"])
@@ -303,12 +294,12 @@ test("toSet", (t) => {
                         }
                         case TYPE.FORMDATA: {
                                 assert.ok(result.success)
-                                assert.deepEqual(Array.from(result.value), [["input", "value"]])
+                                assert.deepEqual(Array.from(result.value), ["value"])
                                 break
                         }
                         case TYPE.MAP: {
                                 assert.ok(result.success)
-                                assert.deepEqual(Array.from(result.value), [["key", "value"]])
+                                assert.deepEqual(Array.from(result.value), ["value"])
                                 break
                         }
                         case TYPE.OBJECT: {
@@ -329,10 +320,9 @@ test("toSet", (t) => {
 })
 
 test("toString", (t) => {
-        for (const value of values) {
-                const thing = Utils.value.create(value)
-                const result = thing.toString()
-                switch (thing.type) {
+        for (const [type, value] of values) {
+                const result = Utils.value.toString(value)
+                switch (type) {
                         case TYPE.ARRAY: {
                                 assert.deepEqual(result, { success: true, value: "foo,bar,baz" })
                                 break
@@ -346,7 +336,7 @@ test("toString", (t) => {
                                 break
                         }
                         case TYPE.FORMDATA: {
-                                assert.deepEqual(result, { success: true, value: "input=value" })
+                                assert.deepEqual(result, { success: true, value: "input,value" })
                                 break
                         }
                         case TYPE.FUNCTION: {
@@ -354,7 +344,7 @@ test("toString", (t) => {
                                 break
                         }
                         case TYPE.MAP: {
-                                assert.deepEqual(result, { success: true, value: '{"key":"value"}' })
+                                assert.deepEqual(result, { success: true, value: "key,value" })
                                 break
                         }
                         case TYPE.NULL: {
@@ -366,7 +356,7 @@ test("toString", (t) => {
                                 break
                         }
                         case TYPE.OBJECT: {
-                                assert.deepEqual(result, { success: true, value: '{"foo":"bar"}' })
+                                assert.deepEqual(result, { success: true, value: "foo,bar" })
                                 break
                         }
                         case TYPE.SET: {
@@ -392,10 +382,9 @@ test("toString", (t) => {
 })
 
 test("toSymbol", (t) => {
-        for (const value of values) {
-                const thing = Utils.value.create(value)
-                const result = thing.toSymbol()
-                switch (thing.type) {
+        for (const [type, value] of values) {
+                const result = Utils.value.toSymbol(value)
+                switch (type) {
                         case TYPE.SYMBOL: {
                                 assert.deepEqual(result, { success: true, value })
                                 break
@@ -413,9 +402,8 @@ test("toSymbol", (t) => {
 })
 
 test("toUndefined", (t) => {
-        for (const value of values) {
-                const thing = Utils.value.create(value)
-                const result = thing.toUndefined()
+        for (const [type, value] of values) {
+                const result = Utils.value.toUndefined(value)
                 assert.deepEqual(result, { success: true, value: undefined })
         }
 })
